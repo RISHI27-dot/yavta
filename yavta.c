@@ -340,6 +340,7 @@ static const struct v4l2_format_info {
 	unsigned int fourcc;
 	unsigned char n_planes;
 } pixel_formats[] = {
+	/* Pixel data formats */
 	{ "RGB332", V4L2_PIX_FMT_RGB332, 1 },
 	{ "RGB444", V4L2_PIX_FMT_RGB444, 1 },
 	{ "ARGB444", V4L2_PIX_FMT_ARGB444, 1 },
@@ -424,6 +425,14 @@ static const struct v4l2_format_info {
 	{ "DV", V4L2_PIX_FMT_DV, 1 },
 	{ "MJPEG", V4L2_PIX_FMT_MJPEG, 1 },
 	{ "MPEG", V4L2_PIX_FMT_MPEG, 1 },
+	/* Metadata formats */
+	{ "GENERIC_8", V4L2_META_FMT_GENERIC_8, 1 },
+	{ "GENERIC_CSI2_10", V4L2_META_FMT_GENERIC_CSI2_10, 1 },
+	{ "GENERIC_CSI2_12", V4L2_META_FMT_GENERIC_CSI2_12, 1 },
+	{ "GENERIC_CSI2_14", V4L2_META_FMT_GENERIC_CSI2_14, 1 },
+	{ "GENERIC_CSI2_16", V4L2_META_FMT_GENERIC_CSI2_16, 1 },
+	{ "GENERIC_CSI2_20", V4L2_META_FMT_GENERIC_CSI2_20, 1 },
+	{ "GENERIC_CSI2_24", V4L2_META_FMT_GENERIC_CSI2_24, 1 },
 };
 
 void v4l2_format_fourcc(__u32 fourcc, char name[5])
