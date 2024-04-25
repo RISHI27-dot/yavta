@@ -438,6 +438,18 @@ static const struct v4l2_format_info {
 	{ "MPEG", V4L2_PIX_FMT_MPEG, 1 },
 };
 
+void v4l2_format_fourcc(__u32 fourcc, char name[5])
+{
+	unsigned int i;
+
+	for (i = 0; i < 4; ++i) {
+		name[i] = fourcc & 0xff;
+		fourcc >>= 8;
+	}
+
+	name[4] = '\0';
+}
+
 static void list_formats(void)
 {
 	unsigned int i;
@@ -480,18 +492,13 @@ static const char *v4l2_format_name(unsigned int fourcc)
 {
 	const struct v4l2_format_info *info;
 	static char name[5];
-	unsigned int i;
 
 	info = v4l2_format_by_fourcc(fourcc);
 	if (info)
 		return info->name;
 
-	for (i = 0; i < 4; ++i) {
-		name[i] = fourcc & 0xff;
-		fourcc >>= 8;
-	}
+	v4l2_format_fourcc(fourcc, name);
 
-	name[4] = '\0';
 	return name;
 }
 
@@ -1947,6 +1954,8 @@ static void video_enum_formats(struct device *dev, enum v4l2_buf_type type)
 	int ret;
 
 	for (i = 0; ; ++i) {
+		char fourcc[5];
+
 		memset(&fmt, 0, sizeof fmt);
 		fmt.index = i;
 		fmt.type = type;
@@ -1961,8 +1970,10 @@ static void video_enum_formats(struct device *dev, enum v4l2_buf_type type)
 			printf("Warning: driver returned wrong format type "
 				"%u.\n", fmt.type);
 
-		printf("\tFormat %u: %s (%08x)\n", i,
-			v4l2_format_name(fmt.pixelformat), fmt.pixelformat);
+		v4l2_format_fourcc(fmt.pixelformat, fourcc);
+		printf("\tFormat %u: %s (%08x, \"%s\")\n", i,
+			v4l2_format_name(fmt.pixelformat), fmt.pixelformat,
+			fourcc);
 		printf("\tType: %s (%u)\n", v4l2_buf_type_name(fmt.type),
 			fmt.type);
 		printf("\tName: %.32s\n", fmt.description);
