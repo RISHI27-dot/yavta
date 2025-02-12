@@ -1944,6 +1944,8 @@ static int video_load_test_pattern(struct device *dev, const char *filename)
 				ret = -EINVAL;
 				goto done;
 			}
+
+			size = ret;
 		} else {
 			uint8_t *data = dev->pattern[plane];
 			unsigned int i;
