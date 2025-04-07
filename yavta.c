@@ -185,7 +185,7 @@ static int pause_init(void)
 }
 
 /* -----------------------------------------------------------------------------
- * Pause Handling
+ * Format handling
  */
 
 static bool video_is_mplane(struct device *dev)
@@ -214,7 +214,7 @@ static bool video_is_output(struct device *dev)
 	       dev->type == V4L2_BUF_TYPE_META_OUTPUT;
 }
 
-static struct {
+static const struct {
 	enum v4l2_buf_type type;
 	bool supported;
 	const char *name;
@@ -261,7 +261,7 @@ static const char *v4l2_buf_type_name(enum v4l2_buf_type type)
 		return "Unknown";
 }
 
-static struct v4l2_format_info {
+static const struct v4l2_format_info {
 	const char *name;
 	unsigned int fourcc;
 	unsigned char n_planes;
@@ -448,6 +448,10 @@ static const char *v4l2_field_name(enum v4l2_field field)
 
 	return "unknown";
 }
+
+/* -----------------------------------------------------------------------------
+ *
+ */
 
 static void video_set_buf_type(struct device *dev, enum v4l2_buf_type type)
 {
@@ -2329,7 +2333,7 @@ static void usage(const char *argv0)
 #define OPT_DATA_PREFIX		271
 #define OPT_RESET_CONTROLS	272
 
-static struct option opts[] = {
+static const struct option opts[] = {
 	{"buffer-size", 1, 0, OPT_BUFFER_SIZE},
 	{"buffer-type", 1, 0, 'B'},
 	{"capture", 2, 0, 'c'},
