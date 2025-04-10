@@ -199,7 +199,7 @@ static int __key_value_get(const struct key_value *values,
 	unsigned int i;
 
 	for (i = 0; i < count; ++i) {
-		if (!strcmp(values[i].name, name))
+		if (!strcasecmp(values[i].name, name))
 			return values[i].value;
 	}
 
@@ -235,11 +235,28 @@ static void __key_value_list(const struct key_value *values,
 	printf("\n");
 }
 
+static const char *__key_value_name(const struct key_value *values,
+				    unsigned int count, unsigned int value,
+				    const char *def_value)
+{
+	unsigned int i;
+
+	for (i = 0; i < count; ++i) {
+		if (values[i].value == value)
+			return values[i].name;
+	}
+
+	return def_value;
+}
+
 #define key_value_get(values, name) \
 	__key_value_get(values, ARRAY_SIZE(values), name)
 
 #define key_value_list(values, type) \
 	__key_value_list(values, ARRAY_SIZE(values), type)
+
+#define key_value_name(values, value, def_value) \
+	__key_value_name(values, ARRAY_SIZE(values), value, def_value)
 
 /* -----------------------------------------------------------------------------
  * Format handling
@@ -466,10 +483,7 @@ static const char *v4l2_format_name(unsigned int fourcc)
 	return name;
 }
 
-static const struct {
-	const char *name;
-	enum v4l2_field field;
-} fields[] = {
+static const struct key_value v4l2_fields[] = {
 	{ "any", V4L2_FIELD_ANY },
 	{ "none", V4L2_FIELD_NONE },
 	{ "top", V4L2_FIELD_TOP },
@@ -482,29 +496,11 @@ static const struct {
 	{ "interlaced-bt", V4L2_FIELD_INTERLACED_BT },
 };
 
-static enum v4l2_field v4l2_field_from_string(const char *name)
-{
-	unsigned int i;
+#define v4l2_field_from_string(name) \
+	key_value_get(v4l2_fields, name)
 
-	for (i = 0; i < ARRAY_SIZE(fields); ++i) {
-		if (strcasecmp(fields[i].name, name) == 0)
-			return fields[i].field;
-	}
-
-	return -1;
-}
-
-static const char *v4l2_field_name(enum v4l2_field field)
-{
-	unsigned int i;
-
-	for (i = 0; i < ARRAY_SIZE(fields); ++i) {
-		if (fields[i].field == field)
-			return fields[i].name;
-	}
-
-	return "unknown";
-}
+#define v4l2_field_name(field) \
+	key_value_name(v4l2_fields, field, "unknown")
 
 static const struct key_value v4l2_colorspaces[] = {
 	{ "DEFAULT", V4L2_COLORSPACE_DEFAULT },
