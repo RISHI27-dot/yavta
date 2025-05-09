@@ -908,13 +908,14 @@ static int video_get_format(struct device *dev)
 				fmt.fmt.pix_mp.plane_fmt[i].sizeimage);
 		}
 	} else if (video_is_meta(dev)) {
-		dev->width = 0;
-		dev->height = 0;
+		dev->width = fmt.fmt.meta.width;
+		dev->height = fmt.fmt.meta.height;
 		dev->num_planes = 1;
 
-		printf("Meta-data format: %s (%08x) buffer size %u\n",
-			v4l2_format_name(fmt.fmt.meta.dataformat), fmt.fmt.meta.dataformat,
-					 fmt.fmt.meta.buffersize);
+		printf("Meta-data format: %s (%08x) %ux%u buffer size %u\n",
+		       v4l2_format_name(fmt.fmt.meta.dataformat),
+		       fmt.fmt.meta.dataformat, fmt.fmt.meta.width,
+		       fmt.fmt.meta.height, fmt.fmt.meta.buffersize);
 	} else {
 		dev->width = fmt.fmt.pix.width;
 		dev->height = fmt.fmt.pix.height;
@@ -970,6 +971,8 @@ static int video_set_format(struct device *dev, unsigned int w, unsigned int h,
 	} else if (video_is_meta(dev)) {
 		fmt.fmt.meta.dataformat = format;
 		fmt.fmt.meta.buffersize = buffer_size;
+		fmt.fmt.meta.width = w;
+		fmt.fmt.meta.height = h;
 	} else {
 		fmt.fmt.pix.width = w;
 		fmt.fmt.pix.height = h;
