@@ -1440,8 +1440,8 @@ static void video_query_menu(struct device *dev,
 			printf("  %u: %.32s%s\n", menu.index, menu.name,
 			       menu.index == value ? " (*)" : "");
 		else
-			printf("  %u: %" PRId64 "%s\n", menu.index,
-			       (int64_t)menu.value,
+			printf("  %u: %" PRId64 " (0x%" PRIx64 ")%s\n", menu.index,
+			       (int64_t)menu.value, (int64_t)menu.value,
 			       menu.index == value ? " (*)" : "");
 	};
 }
